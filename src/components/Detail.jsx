@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
-const keyApi = '1f093e8dd14a8aacaa3b08f454c4309c';
-const baseUrl = 'https://api.themoviedb.org/3';
+const baseUrl = 'https://shy-cloud-3319.fly.dev/api/v1';
+const token = localStorage.getItem('token')
 
 function DetailMovie() {
   const { Id } = useParams();
@@ -14,7 +14,12 @@ function DetailMovie() {
     const fetchFilmDetail = async () => {
       try {
         const response = await fetch(
-          `${baseUrl}/movie/${Id}?api_key=${keyApi}`
+          `${baseUrl}/movie/${Id}`, {
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         if (!response.ok) {
@@ -22,7 +27,7 @@ function DetailMovie() {
         }
 
         const data = await response.json();
-        setFilm(data);
+        setFilm(data.data);
       } catch (error) {
         console.error('Error fetching film detail:', error.message);
       }
