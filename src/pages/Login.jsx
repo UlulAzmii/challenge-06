@@ -1,109 +1,72 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import GoogleLogin from '../components/GoogleLogin';
+import React, { useState } from "react";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import GoogleLogin from "../components/GoogleLogin";
+import { login } from "../redux/actions/authActions";
 
-const Login = () => {
+function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [validation, setValidation] = useState([]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = {
-      email: email,
-      password: password,
-    };
+    let data = JSON.stringify({
+      email,
+      password,
+    });
 
-    const config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'https://shy-cloud-3319.fly.dev/api/v1/auth/login',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: payload,
-    };
-
-    try {
-      const response = await axios(config);
-      console.log(response.data);
-      localStorage.setItem('token', response.data.data.token);
-      navigate('/');
-    } catch (error) {
-      console.log(error.response);
-      setValidation(error.response.data);
-    }
+    dispatch(login(data, navigate));
   };
 
   return (
-    <div className="container" style={{ marginTop: '120px' }}>
-      <div className="row justify-content-center">
-        <div className="col-md-4">
-          <div className="card border-0 rounded shadow-sm">
-            <div className="card-body">
-              <h4 className="fw-bold">HALAMAN LOGIN</h4>
-              <hr />
-              {validation.message && (
-                <div className="alert alert-danger">{validation.message}</div>
-              )}
-              <form onSubmit={handleLogin}>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
-                    ALAMAT EMAIL
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    id="email"
-                    name="email"
-                    placeholder="Masukkan Alamat Email"
-                  />
-                  {validation.email && (
-                    <div className="alert alert-danger">
-                      {validation.email[0]}
-                    </div>
-                  )}
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">
-                    PASSWORD
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    id="password"
-                    name="password"
-                    placeholder="Masukkan Password"
-                  />
-                  {validation.password && (
-                    <div className="alert alert-danger">
-                      {validation.password[0]}
-                    </div>
-                  )}
-                </div>
-                <div className="d-grid gap-2">
-                  <button type="submit" className="btn btn-primary">
-                    LOGIN
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="text-center">
-        <h4 className="text-center">Or</h4>
-        <GoogleLogin buttonText="Login with Google 🚀" />
-      </div>
-    </div>
+    <Container className="p-4">
+      <Row className="mb-4">
+        <Col md={6} className="mx-auto">
+          <Form onSubmit={onSubmit}>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Form.Text className="text-muted">
+                We'll never share your email with anyone else.
+              </Form.Text>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <h4 className="text-center">Or</h4>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="text-center">
+          <GoogleLogin buttonText="Login with Google 🚀" />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

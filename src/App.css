@@ -118,58 +118,48 @@
   border-radius: 10px;
 }
 
-#carouselExample {
-  width: 100%;
-  height: 80vh;
-}
-
-.carousel-inner .carousel-item {
-  height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.carousel-inner .carousel-item img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
 .allName {
-  position: absolute;
-  right: 10px;
-  top: 10px; 
-  width: 15%;
+  width: auto;
   color: #000; /* Corrected color value */
   border-radius: 10px;
-  background-color: #A7D397;
+  background-color: #a7d397;
   text-align: center;
-  padding: 10px; 
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
+  padding: 15px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+/* Tombol Allmovie */
 .allmovie {
-  position: absolute;
-  right: 10px;
-  width: 8%;
-  color: #fff;
+  background-color: #4CAF50;;
   border-radius: 10px;
-  background-color: #ff3d00;
-  text-align: center;
-  padding: 10px; 
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
+  margin: 1%;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+/* Tombol Allreg */
 .allreg {
-  position: absolute;
-  right: 130px;
-  width: 8%;
-  color: #fff;
+  background-color: #008CBA;;
   border-radius: 10px;
-  background-color: #ff3d00;
-  text-align: center;
-  padding: 10px; 
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
+  margin: 1%;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.allout {
+  background-color: #f44336;
+  border-radius: 10px;
+  margin: 1%;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* Responsifkan tombol-tombol pada layar berukuran kecil (misal: di bawah 768px) */
+@media (max-width: 768px) {
+  .allmovie,
+  .allreg {
+    position: relative;
+    width: 60%; /* Tombol mengisi lebar penuh kontainer */
+    right: auto;
+    margin: 2%;
+  }
 }

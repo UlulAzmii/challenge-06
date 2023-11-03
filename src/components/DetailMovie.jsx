@@ -1,40 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchFilmDetail } from '../redux/slices/detailMoviesSlice';
 
-const baseUrl = 'https://shy-cloud-3319.fly.dev/api/v1';
-const token = localStorage.getItem('token')
-
-function DetailMovie() {
+const DetailMovie = () => {
   const { Id } = useParams();
-  const [film, setFilm] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Mengambil token dari Redux state
+  const token = useSelector((state) => state.authReducers.token);
 
   useEffect(() => {
-    const fetchFilmDetail = async () => {
-      try {
-        const response = await fetch(
-          `${baseUrl}/movie/${Id}`, {
-            headers: {
-              accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+    // Memanggil action untuk mengambil detail film
+    dispatch(fetchFilmDetail(Id, token));
+  }, [dispatch, Id, token]);
 
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        setFilm(data.data);
-      } catch (error) {
-        console.error('Error fetching film detail:', error.message);
-      }
-    };
-
-    fetchFilmDetail();
-  }, [Id]);
+  const film = useSelector((state) => state.detailMovies.filmDetail);
 
   if (!film) {
     return <div>Loading...</div>;
@@ -74,6 +57,6 @@ function DetailMovie() {
       </Container>
     </div>
   );
-}
+};
 
 export default DetailMovie;
